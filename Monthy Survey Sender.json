@@ -1,0 +1,247 @@
+{
+  "name": "Monthy Survey Sender",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -432,
+        0
+      ],
+      "id": "4e8df847-9f9d-42ac-be15-2ad57b76e19b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5bbb403d-bea9-488a-b733-ddfb2187655f",
+              "name": "cycle_id",
+              "value": "={{$now.format(\"yyyy-MM\")}}",
+              "type": "string"
+            },
+            {
+              "id": "8bdb3113-d639-4fc2-8681-38420a2a8d40",
+              "name": "survey_sent_date",
+              "value": "={{$now.toISODate()}}",
+              "type": "string"
+            },
+            {
+              "id": "d92b2c44-8147-44ff-ba76-9c7cd08479d5",
+              "name": "status",
+              "value": "open",
+              "type": "string"
+            },
+            {
+              "id": "ff249c52-89b7-4391-9c8e-e89151edcbdf",
+              "name": "survey_link",
+              "value": "https://docs.google.com/forms/d/e/1FAIpQLSd_EhNHcva7ZoYDR1DL4J9i9VH_CueTfTNXWWTn-u2gzmKR0g/viewform?usp=header",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -224,
+        0
+      ],
+      "id": "d203c88d-b0aa-4b57-9d5c-4dd319902cdd",
+      "name": "Set Parameters"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Yy2V8XLbrX_hwvTSmBgBkxFcvftjm-S1hz7fN4Ku824",
+          "mode": "list",
+          "cachedResultName": "Survey-MoonFire (Responses)",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Yy2V8XLbrX_hwvTSmBgBkxFcvftjm-S1hz7fN4Ku824/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1333053372,
+          "mode": "list",
+          "cachedResultName": "Survey Cycles",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Yy2V8XLbrX_hwvTSmBgBkxFcvftjm-S1hz7fN4Ku824/edit#gid=1333053372"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "cycle_id": "={{$json.cycle_id}}",
+            "survey_sent _date": "={{$json.survey_sent_date}}",
+            "survey_close_date": "={{$json.survey_close_date}}",
+            "status": "={{$json.status}}",
+            "survey_link": "={{$json.survey_link}}"
+          },
+          "matchingColumns": [
+            "cycle_id"
+          ],
+          "schema": [
+            {
+              "id": "cycle_id",
+              "displayName": "cycle_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "survey_sent _date",
+              "displayName": "survey_sent _date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "survey_close_date",
+              "displayName": "survey_close_date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "survey_link",
+              "displayName": "survey_link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -16,
+        0
+      ],
+      "id": "fde9699d-506c-4d0a-8c30-9a06b6963e12",
+      "name": "Add Survey Info",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "QTLNqn8fDelsf3eP",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "krish.achar9@gmail.com",
+        "subject": "=Team Pulse Survey – {{$json.cycle_id}}",
+        "message": "=Hi Team,  Please complete this month’s pulse survey.  Survey cycle: {{$json.cycle_id}} Survey closes on: {{$json.survey_close_date}}  Survey link: {{$json.survey_link}}  Thank you.",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        0
+      ],
+      "id": "10a62656-93c8-4958-8c77-bcbf88323bac",
+      "name": "Send Email",
+      "webhookId": "5ab47e0b-09df-4714-8caf-cd0c142243fa",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "4Le283NqIBPVGYEl",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtDayOfMonth": 4
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        -176
+      ],
+      "id": "9b644f83-fa67-4239-a876-dfcf12165be4",
+      "name": "Schedule Trigger"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Set Parameters",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Parameters": {
+      "main": [
+        [
+          {
+            "node": "Add Survey Info",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add Survey Info": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "0ee90789-7488-45e0-99fc-0b48a38e5b81",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "16e41e27b9f9d502e70aa88a76b9b2840ad51d754a4e9fab92233d46d2836f4c"
+  },
+  "id": "MFVcE08q3go4jiIC",
+  "tags": []
+}
